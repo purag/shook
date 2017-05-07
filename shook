@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+find_hooks () {
+  local dir=$PWD
+  while [ "$dir" != "/" ] && [ ! -f "$dir/.hooks" ]; do
+    dir=$(dirname $dir)
+  done
+  [ -f "$dir/.hooks" ] && echo "found $dir/.hooks"
+}
+
+exec_hooks () {
+  find_hooks
+}
+
+pre_exec () {
+  echo pre_exec
+  exec_hooks
+}
+
+trap "pre_exec" DEBUG
